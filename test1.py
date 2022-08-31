@@ -1,36 +1,43 @@
 import requests
 
 
-token = "RGAPI-54047b3b-869b-43a6-86a4-be24ebee61ed"
-
-r = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/afrozone?api_key=" + token)
-
-print("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/afrozone?api_key="  + token)
-print(r)
-print(r.headers)
-print(r.text)
-print(r.json())
+token = "RGAPI-0c033be1-f5f7-42f4-b475-4d78c203ac81"
+summoner_name = "cowboy%20waters"
 
 
 
-r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/LNfX0XWN6rZoGxtlTI9t2-kPizmUsRzyVWGbCcJHwHzgXYZ2sz7nXO8IoXiHtgnlcx2TPTQApaeSTw/ids?api_key=" + token)
-print(r)
-print(r.headers)
-print(r.json()[0])
-matches = r.json()
-match1 = r.json()[0]
+def f1(name):
 
-r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/" + match1 + "?api_key=" + token)
+	# Make summoner name URL friendly (alien waters -> alien%20waters)
+	url_name = name.replace(" ", "%20")
 
-players = r.json()['info']['participants']
+	# r is request to fetch puuid of summoner
+	r = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + url_name + "?api_key=" + token)
+	puuid = r.json()['puuid']
 
-for player in players:
-	print(player['championName'] + " damage: " + str(player['totalDamageDealtToChampions']))
+	# default is fetch past 20 matches
+	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?api_key=" + token)
+	matches = r.json()
 
-for m in matches:
-	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/" + m + "?api_key=" + token)
-	players = r.json()['info']['participants']
+	# put result into string
+	gameList = []
+	for m in matches:
+		# fetch match
+		r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/" + m + "?api_key=" + token)
 
-	for player in players:
-		if player['summonerName'] == "afrozone":
-			print(player['win'])
+		players = r.json()['info']['participants']
+		for player in players:
+			if player['summonerName'] == name:
+
+				# champ name
+				gameInfo = player['championName'] + " - "
+
+				# win/loss
+				if(player['win']):
+					gameInfo += "Victory"
+				else:
+					gameInfo += "Defeat"
+
+				gameList.append(gameInfo)
+
+	return gameList
