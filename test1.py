@@ -10,6 +10,7 @@ def f1(name):
 
 	# Make summoner name URL friendly (alien waters -> alien%20waters)
 	url_name = name.replace(" ", "%20")
+	print(url_name)
 
 	# r is request to fetch puuid of summoner
 	r = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + url_name + "?api_key=" + token)
@@ -19,7 +20,9 @@ def f1(name):
 	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?api_key=" + token)
 	matches = r.json()
 
-	# put result into string
+	print(matches)
+
+	# put game info strings (Champ - Win/Loss) into a list and sent to be looped throguh in HTML
 	gameList = []
 	for m in matches:
 		# fetch match
@@ -27,7 +30,8 @@ def f1(name):
 
 		players = r.json()['info']['participants']
 		for player in players:
-			if player['summonerName'] == name:
+			# casefold for case insensitive comparisons
+			if player['summonerName'].casefold() == name.casefold():
 
 				# champ name
 				gameInfo = player['championName'] + " - "
