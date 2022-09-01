@@ -9,3 +9,8 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route('/summoner/<name>')
 def hello_name(name):
     return render_template('main.html', gameList = f1(name))
+
+
+@app.route('/profile/<name>')
+def profile_analysis(name):
+    # return render_template('profile.html', gameList = profanalysis(name))
