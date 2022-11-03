@@ -1,10 +1,6 @@
 import requests
 
-
-token = "RGAPI-0c033be1-f5f7-42f4-b475-4d78c203ac81"
-
-
-def f1(name):
+def f1(name, token):
 
 	# Make summoner name URL friendly (alien waters -> alien%20waters)
 	url_name = name.replace(" ", "%20")
