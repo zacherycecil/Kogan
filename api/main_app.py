@@ -14,6 +14,10 @@ def summoner_page(name):
 def login():
     return render_template('login.html')
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 #@app.route('/profile/<name>')
 #def profile_analysis(name):
 #    return render_template('profile.html', gameList = profanalysis(name))
