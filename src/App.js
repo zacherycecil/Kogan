@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-
+  const [string1, setString1] = useState(0);
+  
   useEffect(() => {
-    fetch('/api/summoner/afrozone').then(res => res.json()).then(data => {
-      setCurrentTime(data[0]);
-    });
-  }, []);
+	fetch("/api/summoner/afrozone").then(res => res.json()).then(data => {
+		setString1(data[0])
+	})
+  }, [string1]);
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>Last game played: {fetch('/api/summoner/afrozone')[0]}</p>
+        <p>Last game played: {string1}</p>
       </header>
     </div>
   );
