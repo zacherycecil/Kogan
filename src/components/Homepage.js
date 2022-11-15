@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Homepage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 export const Homepage = () => {
 
@@ -19,9 +21,7 @@ export const Homepage = () => {
 
   return (
     <div className="sitewide">
-	    <h1>
-	      Home Page
-	    </h1>
+      
       <Link to='/login'>Login</Link>
       <form onSubmit={handleSubmit}>
         <label>

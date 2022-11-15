@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { League } from './League';
 import axios from 'axios';
 
@@ -14,6 +14,8 @@ export const Summoner = () => {
   const [queueInfo, setQueueInfo] = useState([]);
   const [isRanked, setIsRanked] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
   const { name } = useParams();
 
   const setQueueType = async (queueName) => {
@@ -72,6 +74,10 @@ export const Summoner = () => {
 
   return (
     <div className='sitewide'>
+      <button onClick={() => navigate("/")}>
+        Return Home
+      </button>
+
       <h1>Summoner Stats for {summonerInfo['name']} (Level {summonerInfo['summonerLevel']})</h1>
        
       <label>
