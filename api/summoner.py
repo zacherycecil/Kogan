@@ -1,19 +1,25 @@
 import requests
+import os
 
-def f1(name, token):
+token = os.getenv("TOKEN")
+
+def get_summoner_info(name):
 
 	# Make summoner name URL friendly (alien waters -> alien%20waters)
 	url_name = name.replace(" ", "%20")
-	print(url_name)
 
 	# r is request to fetch puuid of summoner
-	r = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + url_name + "?api_key=" + token)
-	puuid = r.json()['puuid']
+	r = requests.get("https://na1.api.riotgames.com"
+		+ "/lol/summoner/v4/summoners/by-name/" + url_name 
+		+ "?api_key=" + token)
 
-	print(r.json())
-	
+	return r.json()
+
+def past_10_games(summInfo):
+
+	print(summInfo)
 	# default is fetch past 20 matches
-	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?api_key=" + token)
+	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + summInfo['puuid'] + "/ids?api_key=" + token)
 	matches = r.json()
 
 	print(matches)
