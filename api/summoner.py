@@ -17,12 +17,9 @@ def get_summoner_info(name):
 
 def past_10_games(summInfo):
 
-	print(summInfo)
 	# default is fetch past 20 matches
 	r = requests.get("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + summInfo['puuid'] + "/ids?api_key=" + token)
 	matches = r.json()
-
-	print(matches)
 
 	# put game info strings (Champ - Win/Loss) into a list and sent to be looped throguh in HTML
 	gameList = []

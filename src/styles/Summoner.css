@@ -1,3 +1,15 @@
 .sitewide {
   padding: 10%;
 }
+
+.rankedInfo {
+  border: 2px solid darkslateblue;
+  border-radius: 5px;
+  padding: 10px
+}
+
+.masteryInfo {
+  border: 2px solid darkslateblue;
+  border-radius: 5px;
+  padding: 10px
+}

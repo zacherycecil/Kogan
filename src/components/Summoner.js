@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { League } from './League';
+import { Header } from './Header';
 import axios from 'axios';
 
 // Style
@@ -11,6 +12,7 @@ export const Summoner = () => {
   // useState & useParam
   const [summonerInfo, setSummonerInfo] = useState([]);
   const [leagueInfo, setLeagueInfo] = useState([]);
+  const [masteryInfo, setMasteryInfo] = useState([]);
   const [queueInfo, setQueueInfo] = useState([]);
   const [isRanked, setIsRanked] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -68,35 +70,50 @@ export const Summoner = () => {
             }
           }
         });
+
+      // api call for mastery
+      axios
+        .get('/api/mastery/' + id)
+        .then((res) => {
+          setMasteryInfo(res.data);
+      });
     };  
     fetchInfo();
   }, []);
 
   return (
-    <div className='sitewide'>
-      <button onClick={() => navigate("/")}>
-        Return Home
-      </button>
-
-      <h1>Summoner Stats for {summonerInfo['name']} (Level {summonerInfo['summonerLevel']})</h1>
-       
-      <label>
-        Queue Type: 
-        <select onChange={handleChange}>
-          <option value="RANKED_SOLO_5x5">Solo Queue</option>
-          <option value="RANKED_FLEX_SR">Ranked Flex</option>
-          <option value="RANKED_TFT_DOUBLE_UP">Teamfight Tactics</option>
-        </select>
-      </label>
-
-      {!loading &&
-        <h2>
-          { isRanked
-            ? queueInfo['tier'] + ' - ' + queueInfo['rank']
-            : 'Unranked'
-          }
-        </h2>
+    <div>
+      {loading
+        ? <Header pageName='Loading ...'/>
+        : <Header pageName={summonerInfo['name'] + ' Summoner Page'}/>
       }
+      <div className='rankedInfo'>
+        <h2>Level {summonerInfo['summonerLevel']}</h2>
+         
+        <label>
+          Queue Type: 
+          <select onChange={handleChange}>
+            <option value="RANKED_SOLO_5x5">Solo Queue</option>
+            <option value="RANKED_FLEX_SR">Ranked Flex</option>
+            <option value="RANKED_TFT_DOUBLE_UP">Teamfight Tactics</option>
+          </select>
+        </label>
+
+        {!loading &&
+          <h2>
+            { isRanked
+              ? queueInfo['tier'] + ' - ' + queueInfo['rank'] 
+                + ' (' + queueInfo['leaguePoints'] + ' LP) '
+                + queueInfo['wins'] + 'W - ' + queueInfo['losses'] + 'L'
+              : 'Unranked'
+            }
+          </h2>
+        }
+      </div>
+      <div className='rankedInfo'>
+        <h2>Level {summonerInfo['summonerLevel']}</h2>
+        <p>{JSON.stringify(masteryInfo)}</p>
+      </div>
     </div>
   );
 };

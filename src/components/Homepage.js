@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { League } from './League';
+import { Header } from './Header';
 import '../styles/Homepage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
@@ -20,8 +22,9 @@ export const Homepage = () => {
   }
 
   return (
-    <div className="sitewide">
-      
+    <div>
+      <Header pageName='Home'/>
+
       <Link to='/login'>Login</Link>
       <form onSubmit={handleSubmit}>
         <label>
