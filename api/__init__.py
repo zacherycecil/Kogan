@@ -3,6 +3,7 @@ from flask import render_template
 from api.summoner import *
 from api.league import *
 from api.mastery import *
+from api.champion import *
 
 def create_app():
 
@@ -20,5 +21,9 @@ def create_app():
     @app.route('/api/mastery/<summoner_id>')
     def mastery(summoner_id):
         return get_mastery_info(summoner_id)
+
+    @app.route('/api/champion/<champion_id>')
+    def champion(champion_id):
+        return get_champion_info(champion_id)
 
     return app

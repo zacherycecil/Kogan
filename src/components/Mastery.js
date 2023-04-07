@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-
+import { League } from './League';
 import { Header } from './Header';
-import { Champion } from './Champion';
 import axios from 'axios';
 
 // Style
@@ -15,6 +14,7 @@ export const Summoner = () => {
   const [leagueInfo, setLeagueInfo] = useState([]);
   const [masteryInfo, setMasteryInfo] = useState([]);
   const [queueInfo, setQueueInfo] = useState([]);
+  const [championInfo, setChampionInfo] = useState([]);
   const [isRanked, setIsRanked] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -67,6 +67,7 @@ export const Summoner = () => {
             {
               setQueueInfo(queue);
               setIsRanked(true);
+              setLoading(false);
             }
           }
         });
@@ -76,7 +77,13 @@ export const Summoner = () => {
         .get('/api/mastery/' + id)
         .then((res) => {
           setMasteryInfo(res.data);
-          setLoading(false);
+      });
+
+      // api call for mastery
+      axios
+        .get('/api/champion')
+        .then((res) => {
+          setChampionInfo(res.data);
       });
     };  
     fetchInfo();
@@ -86,10 +93,10 @@ export const Summoner = () => {
     <div>
       {loading
         ? <Header pageName='Loading ...'/>
-        : <Header pageName={summonerInfo['name'] + ' (Level ' + summonerInfo['summonerLevel'] + ')'}/>
+        : <Header pageName={summonerInfo['name'] + ' Summoner Page'}/>
       }
       <div className='rankedInfo'>
-        <h3>Ranked Queues</h3>
+        <h2>Level {summonerInfo['summonerLevel']}</h2>
          
         <label>
           Queue Type: 
@@ -101,23 +108,19 @@ export const Summoner = () => {
         </label>
 
         {!loading &&
-          <h4>
+          <h2>
             { isRanked
               ? queueInfo['tier'] + ' - ' + queueInfo['rank'] 
                 + ' (' + queueInfo['leaguePoints'] + ' LP) '
                 + queueInfo['wins'] + 'W - ' + queueInfo['losses'] + 'L'
               : 'Unranked'
             }
-          </h4>
+          </h2>
         }
       </div>
       <div className='rankedInfo'>
-        <h3>Champion Mastery</h3>
-        {!loading &&
-          <div>
-            <Champion />
-          </div>
-        }
+        <h2>Level {summonerInfo['summonerLevel']}</h2>
+        <p>{JSON.stringify(masteryInfo)}</p>
       </div>
     </div>
   );
