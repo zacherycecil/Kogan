@@ -2,18 +2,23 @@ import requests
 import os
 
 token = os.getenv("TOKEN")
+tft_token = os.getenv("TFT_TOKEN")
 
-def get_summoner_info(name):
+def get_summoner_info(nameURL):
 
 	# Make summoner name URL friendly (alien waters -> alien%20waters)
-	url_name = name.replace(" ", "%20")
+	url_name = nameURL.replace(" ", "%20")
 
 	# r is request to fetch puuid of summoner
-	r = requests.get("https://na1.api.riotgames.com"
-		+ "/lol/summoner/v4/summoners/by-name/" + url_name 
-		+ "?api_key=" + token)
+	r1 = requests.get("https://na1.api.riotgames.com"
+		+ "/lol/summoner/v4/summoners/by-name/" + url_name
+		+ "?api_key=" + token).json()
 
-	return r.json()
+	r2 = requests.get("https://na1.api.riotgames.com"
+		+ "/tft/summoner/v1/summoners/by-name/" + url_name
+		+ "?api_key=" + tft_token).json()
+	
+	return [r1, r2]
 
 def past_10_games(summInfo):
 

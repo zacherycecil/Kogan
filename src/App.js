@@ -20,7 +20,7 @@ export default function App() {
             <div className="sitewide">
                 <Routes>
                     <Route exact path='/' element={<Homepage/>}/>
-    	    	    <Route exact path='/summoner/:name' element={<Summoner/>} pageName='Summoner Page'/>
+    	    	    <Route exact path='/summoner/:nameURL' element={<Summoner/>} pageName='Summoner Page'/>
                     <Route exact path='/login' element={<Login/>}/>
     	       </Routes>
             </div>

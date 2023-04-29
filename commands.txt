@@ -1,0 +1,27 @@
+sudo su
+yum update -y
+yum install httpd -y
+sudo systemctl enable httpd
+sudo systemctl start httpd
+dnf install git
+git clone https://github.com/zacherycecil/Kogan.git
+cd Kogan
+dnf install python -y
+source venv/bin/activate
+pip install python-dotenv flask requests
+dnf install nodejs -y
+npm install --global yarn
+yarn
+yarn build
+yarn start
+
+vi .flaskenv
+PASTE THIS
+FLASK_APP=api
+FLASK_DEBUG=1
+
+esc -> :wq!
+
+vi .env
+PASTE THIS
+TOKEN=RGAPI-3e80376a-4ddd-47c1-b4a5-6a1185700cc8

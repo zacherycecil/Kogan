@@ -1,63 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Style
 import '../styles/Summoner.css';
 
-export const Champion = (champId) => {
+// EXT FUNC --------------------------------------------------------------------
+const getChampions = async () => {
+  const res = await axios.get('/api/champion');
+  return res.data;
+}
 
-  const [allChampionsInfo, setAllChampionsInfo] = useState([]);
-  const [championInfo, setChampionInfo] = useState([]);
-  const [loading, setLoading] = useState(true);
+const getMastery = async (id) => {
+  const res = await axios.get('/api/mastery/' + id);
+  return res.data;
+}
 
-  useEffect(() => {
-    const fetchInfo = async () => {
-      // api call for champion information
-      console.log('/api/champion/' + champId)
-      await axios('/api/champion/' + champId).then((res) => {
-        setAllChampionsInfo(res.data);
 
-        const champs = res.data.data
-        console.log(res)
-        for (let i=0; i<champs.length; i++) {
-          let champ = champs[i];
-          console.log(champ['key'] === champId)
-          console.log(champId)
-          console.log(champ['key'])
-          if(champ['key'] === champId)
-          {
-            setChampionInfo(champ);
-          }
-        }
-        setLoading(false);
-      })
-    }
-    fetchInfo();
-  }, [])
 
-  const getChamp = async (id) => {
-    // loop 
-    for (let i=0; i<allChampionsInfo.length; i++) {
-      let champ = allChampionsInfo[i];
-      if(champ['key'] === id)
-      {
-        await setChampionInfo(champ);
-      }
-    }
-    setLoading(false);
+// COMPONENT ---------------------------------------------------------------------
+export const Champion = props => {
+
+  // use STATE
+  const [champions, setChampions] = useState([]);
+  const [champId, setChampId] = useState([]);
+  const [champName, setChampName] = useState([]);
+  const [champPoints, setChampPoints] = useState([]);
+
+  // FUNC -----------------------------------------------------------------------
+  const fetchChampName = (id) => {
+    let myStr = '';
+    champions.map(champ => {
+      if (champ['key'] == id)
+        myStr = champ['name']
+    })
+    return myStr
   }
 
+
+  // USE EFFECT -----------------------------------------------------------------
+  useEffect(() => {
+    getChampions().then(res => setChampions(res)).then(
+      props.id &&
+      getMastery(props.id).then(res =>
+        res.forEach(champ => {
+          setChampId(champId => [...champId, champ['championId']])
+          setChampName(champName => [...champName, fetchChampName(champ['championId'])])
+          setChampPoints(champPoints => [...champPoints, champ['championPoints']])
+        })
+      ));
+  }, [props.id]);
+
+  // RETURN ------------------------------------------------------------------------
   return (
-    <p>
-      { 
-        championInfo.map((champ) =>
-          {
-          return champ['key']
-          }
-        ),
-        JSON.stringify(championInfo)
-      }
-    </p>
+    <ul>
+      {champId &&
+        champId.map((champ, i) => {
+          return <h4 key={champ}>{champName[i] + " - " + champPoints[i]}</h4>
+        })}
+    </ul>
   );
 };
