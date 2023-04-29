@@ -24,4 +24,4 @@ esc -> :wq!
 
 vi .env
 PASTE THIS
-TOKEN=RGAPI-3e80376a-4ddd-47c1-b4a5-6a1185700cc8
+TOKEN=RGAPI-xxx...
